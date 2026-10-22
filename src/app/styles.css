@@ -103,15 +103,22 @@ html {
   font-size: 12px;
   color: var(--red);
 }
-.install-button {
+.install-button,
+.official-link {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 9px 10px;
   font-size: 12px;
-  border-color: var(--ink);
+  border: 1px solid var(--ink);
 }
-.install-button:hover {
+.official-link {
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.install-button:hover,
+.official-link:hover {
   background: #e8e2d5;
 }
 .lottery-tabs {
@@ -798,12 +805,15 @@ html {
     margin-top: 7px;
   }
   .header-actions {
+    width: 100%;
+    justify-content: space-between;
     gap: 7px;
   }
   .offline-label {
     font-size: 10px;
   }
-  .install-button {
+  .install-button,
+  .official-link {
     padding: 8px;
     font-size: 11px;
     gap: 5px;

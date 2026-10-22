@@ -13,6 +13,15 @@ export function SiteHeader({ online }: { online: boolean }) {
         <span>로또 · 연금복권 번호 도구</span>
       </a>
       <div className="header-actions">
+        <a
+          className="official-link"
+          href="https://www.dhlottery.co.kr/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="동행복권 바로가기 (새 탭)"
+        >
+          동행복권 바로가기
+        </a>
         {!online && <span className="offline-label">오프라인</span>}
         <PwaNotice />
       </div>
