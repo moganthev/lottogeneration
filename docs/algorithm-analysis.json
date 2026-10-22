@@ -1,0 +1,376 @@
+{
+  "note": "Descriptive selection-bias audit, not a backtest of winning probability. Unconstrained recommendations only. The uniform baseline samples five independent games; it does not diversify them.",
+  "data": {
+    "kind": "historical",
+    "firstDraw": 1,
+    "latestDraw": 1246,
+    "drawCount": 1246,
+    "latestDrawDate": "2026-10-17",
+    "lastUpdated": "2026-10-22T00:39:27.687Z",
+    "dataSha256": "ea1067b2960acbd3d73f2c25d4eb37d0486e5948ac891509e01a166bc5adbfcf",
+    "source": {
+      "name": "동행복권 로또6/45 공개 추첨 결과",
+      "url": "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1246",
+      "retrievedAt": "2026-10-22T00:39:27.687Z",
+      "sha256": "e09e2016fe0043da15ebc31f31aae62fc5ad1c4d9b25df421cb874e75af806bf"
+    }
+  },
+  "config": {
+    "min": 1,
+    "max": 45,
+    "size": 6,
+    "games": 5,
+    "lowMax": 22,
+    "recentWindow": 30,
+    "candidateCount": 5000,
+    "rankingPool": 500,
+    "overlapPenalty": 9,
+    "repetitionPenalty": 3,
+    "coverageReward": 3,
+    "minimumRelativeScore": 0.85,
+    "distributionFloor": 0.25,
+    "weights": {
+      "frequency": 0.04,
+      "recentFrequency": 0.02,
+      "oddEven": 0.17,
+      "lowHigh": 0.13,
+      "rangeDistribution": 0.16,
+      "sum": 0.2,
+      "consecutive": 0.08,
+      "endingDigit": 0.07,
+      "gap": 0.08,
+      "acValue": 0.05
+    }
+  },
+  "seed": 20261022,
+  "iterations": 200,
+  "games": 1000,
+  "averageScore": 97.366,
+  "minimumScore": 94,
+  "maximumScore": 98,
+  "averageBestSelectedScore": 98,
+  "averageUniqueNumberCount": 29.985,
+  "averagePairSimilarity": 0.0015000000000000002,
+  "maximumPairSimilarity": 1,
+  "averageNumberSum": 137.562,
+  "minimumSum": 123,
+  "maximumSum": 151,
+  "oddDistribution": [0, 0, 9, 934, 57, 0, 0],
+  "sumDistributionByTens": [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 641, 309, 6, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0
+  ],
+  "selectionFrequency": [
+    {
+      "number": 1,
+      "count": 124,
+      "baselineCount": 132,
+      "ratioToUniformMean": 0.93
+    },
+    {
+      "number": 2,
+      "count": 127,
+      "baselineCount": 130,
+      "ratioToUniformMean": 0.952
+    },
+    {
+      "number": 3,
+      "count": 123,
+      "baselineCount": 143,
+      "ratioToUniformMean": 0.922
+    },
+    {
+      "number": 4,
+      "count": 121,
+      "baselineCount": 104,
+      "ratioToUniformMean": 0.907
+    },
+    {
+      "number": 5,
+      "count": 115,
+      "baselineCount": 130,
+      "ratioToUniformMean": 0.862
+    },
+    {
+      "number": 6,
+      "count": 138,
+      "baselineCount": 136,
+      "ratioToUniformMean": 1.035
+    },
+    {
+      "number": 7,
+      "count": 143,
+      "baselineCount": 130,
+      "ratioToUniformMean": 1.073
+    },
+    {
+      "number": 8,
+      "count": 139,
+      "baselineCount": 127,
+      "ratioToUniformMean": 1.042
+    },
+    {
+      "number": 9,
+      "count": 137,
+      "baselineCount": 104,
+      "ratioToUniformMean": 1.027
+    },
+    {
+      "number": 10,
+      "count": 139,
+      "baselineCount": 156,
+      "ratioToUniformMean": 1.042
+    },
+    {
+      "number": 11,
+      "count": 136,
+      "baselineCount": 145,
+      "ratioToUniformMean": 1.02
+    },
+    {
+      "number": 12,
+      "count": 146,
+      "baselineCount": 134,
+      "ratioToUniformMean": 1.095
+    },
+    {
+      "number": 13,
+      "count": 162,
+      "baselineCount": 129,
+      "ratioToUniformMean": 1.215
+    },
+    {
+      "number": 14,
+      "count": 141,
+      "baselineCount": 140,
+      "ratioToUniformMean": 1.057
+    },
+    {
+      "number": 15,
+      "count": 147,
+      "baselineCount": 142,
+      "ratioToUniformMean": 1.102
+    },
+    {
+      "number": 16,
+      "count": 154,
+      "baselineCount": 121,
+      "ratioToUniformMean": 1.155
+    },
+    {
+      "number": 17,
+      "count": 147,
+      "baselineCount": 130,
+      "ratioToUniformMean": 1.102
+    },
+    {
+      "number": 18,
+      "count": 155,
+      "baselineCount": 131,
+      "ratioToUniformMean": 1.162
+    },
+    {
+      "number": 19,
+      "count": 139,
+      "baselineCount": 149,
+      "ratioToUniformMean": 1.042
+    },
+    {
+      "number": 20,
+      "count": 152,
+      "baselineCount": 139,
+      "ratioToUniformMean": 1.14
+    },
+    {
+      "number": 21,
+      "count": 99,
+      "baselineCount": 140,
+      "ratioToUniformMean": 0.742
+    },
+    {
+      "number": 22,
+      "count": 101,
+      "baselineCount": 147,
+      "ratioToUniformMean": 0.757
+    },
+    {
+      "number": 23,
+      "count": 98,
+      "baselineCount": 134,
+      "ratioToUniformMean": 0.735
+    },
+    {
+      "number": 24,
+      "count": 135,
+      "baselineCount": 121,
+      "ratioToUniformMean": 1.012
+    },
+    {
+      "number": 25,
+      "count": 133,
+      "baselineCount": 129,
+      "ratioToUniformMean": 0.997
+    },
+    {
+      "number": 26,
+      "count": 118,
+      "baselineCount": 147,
+      "ratioToUniformMean": 0.885
+    },
+    {
+      "number": 27,
+      "count": 133,
+      "baselineCount": 147,
+      "ratioToUniformMean": 0.997
+    },
+    {
+      "number": 28,
+      "count": 142,
+      "baselineCount": 121,
+      "ratioToUniformMean": 1.065
+    },
+    {
+      "number": 29,
+      "count": 130,
+      "baselineCount": 131,
+      "ratioToUniformMean": 0.975
+    },
+    {
+      "number": 30,
+      "count": 120,
+      "baselineCount": 115,
+      "ratioToUniformMean": 0.9
+    },
+    {
+      "number": 31,
+      "count": 149,
+      "baselineCount": 138,
+      "ratioToUniformMean": 1.117
+    },
+    {
+      "number": 32,
+      "count": 119,
+      "baselineCount": 125,
+      "ratioToUniformMean": 0.892
+    },
+    {
+      "number": 33,
+      "count": 130,
+      "baselineCount": 107,
+      "ratioToUniformMean": 0.975
+    },
+    {
+      "number": 34,
+      "count": 138,
+      "baselineCount": 134,
+      "ratioToUniformMean": 1.035
+    },
+    {
+      "number": 35,
+      "count": 134,
+      "baselineCount": 145,
+      "ratioToUniformMean": 1.005
+    },
+    {
+      "number": 36,
+      "count": 137,
+      "baselineCount": 122,
+      "ratioToUniformMean": 1.027
+    },
+    {
+      "number": 37,
+      "count": 139,
+      "baselineCount": 138,
+      "ratioToUniformMean": 1.042
+    },
+    {
+      "number": 38,
+      "count": 145,
+      "baselineCount": 136,
+      "ratioToUniformMean": 1.087
+    },
+    {
+      "number": 39,
+      "count": 139,
+      "baselineCount": 131,
+      "ratioToUniformMean": 1.042
+    },
+    {
+      "number": 40,
+      "count": 125,
+      "baselineCount": 159,
+      "ratioToUniformMean": 0.937
+    },
+    {
+      "number": 41,
+      "count": 123,
+      "baselineCount": 148,
+      "ratioToUniformMean": 0.922
+    },
+    {
+      "number": 42,
+      "count": 135,
+      "baselineCount": 129,
+      "ratioToUniformMean": 1.012
+    },
+    {
+      "number": 43,
+      "count": 139,
+      "baselineCount": 135,
+      "ratioToUniformMean": 1.042
+    },
+    {
+      "number": 44,
+      "count": 125,
+      "baselineCount": 129,
+      "ratioToUniformMean": 0.937
+    },
+    {
+      "number": 45,
+      "count": 129,
+      "baselineCount": 140,
+      "ratioToUniformMean": 0.967
+    }
+  ],
+  "bias": {
+    "expectedCountPerNumber": 133.33333333333334,
+    "maximumToMean": 1.2149999999999999,
+    "minimumToMean": 0.735,
+    "maxToMin": 1.653061224489796,
+    "coefficientOfVariation": 0.10359777989899203,
+    "reviewThreshold": 1.5,
+    "flaggedNumbers": []
+  },
+  "historicalChecks": {
+    "numberFrequencyTotal": 7476,
+    "recentTotals": {
+      "10": 60,
+      "30": 180,
+      "50": 300
+    },
+    "sums": {
+      "mean": 138.2776886035313,
+      "median": 138,
+      "standardDeviation": 30.640827154606075,
+      "lowerQuartile": 117,
+      "upperQuartile": 160
+    },
+    "odd": [17, 83, 284, 414, 330, 99, 19],
+    "low": [17, 113, 313, 411, 282, 94, 16],
+    "ranges": [
+      [271, 470, 387, 105, 11, 2, 0],
+      [211, 506, 377, 131, 19, 2, 0],
+      [263, 495, 371, 99, 16, 2, 0],
+      [252, 471, 366, 136, 18, 3, 0],
+      [598, 494, 138, 16, 0, 0, 0]
+    ],
+    "consecutive": [601, 489, 134, 20, 2, 0],
+    "endings": [667, 828, 790, 848, 858, 816, 668, 698, 671, 632],
+    "acValue": [0, 0, 3, 4, 24, 42, 118, 174, 433, 220, 228],
+    "firstDrawOdd": {
+      "odd": 4,
+      "even": 2
+    }
+  },
+  "durationMs": 17316
+}
