@@ -5,7 +5,7 @@ export const PENSION_LOTTERY_CONFIG = {
   digitMin: 0,
   digitMax: 9,
   recommendations: 5,
-  candidateCount: 1_200,
+  maxGenerationAttempts: 1_200,
   scoring: { digitDiversity: 0.7, repetition: 0.2, positionFrequency: 0.1 },
   rules: {
     source: 'https://www.dhlottery.co.kr/pt720/intro',

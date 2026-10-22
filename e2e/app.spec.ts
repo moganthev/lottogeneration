@@ -104,6 +104,39 @@ test('pension tab returns five valid tickets and restores the last tab', async (
   ).toBeVisible();
 });
 
+test('pension recommendations display repeated digits and preserve them after reload', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const digits =
+      '000000111111112233101010999999123456234567345678456789567890';
+    let cursor = 0;
+    const original = crypto.getRandomValues.bind(crypto);
+    Object.defineProperty(crypto, 'getRandomValues', {
+      value: (buffer: Uint32Array) => {
+        if (!(buffer instanceof Uint32Array)) return original(buffer);
+        for (let i = 0; i < buffer.length; i++) {
+          const digit = Number(digits[cursor++ % digits.length]);
+          buffer[i] = Math.floor(((digit + 0.5) / 10) * 0x1_0000_0000);
+        }
+        return buffer;
+      },
+    });
+  });
+  await page.goto('./');
+  await page.getByRole('tab', { name: '연금복권' }).click();
+  await page
+    .getByRole('button', { name: '연금복권 번호 추천', exact: true })
+    .click();
+  const expected = ['000000', '111111', '112233', '101010', '999999'];
+  await expect(page.locator('.pension-digits')).toHaveText(expected);
+  await expect(page.locator('.pension-meta').first()).toContainText(
+    '최대 반복 6회',
+  );
+  await page.reload();
+  await expect(page.locator('.pension-digits')).toHaveText(expected);
+});
+
 test('mobile number settings work before recommending', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('./');

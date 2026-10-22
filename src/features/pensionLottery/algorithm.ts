@@ -37,6 +37,7 @@ export function calculatePositionFrequency(history: PensionTicket[]) {
   return frequencies;
 }
 
+// Describe a completed number; this score is never used to select tickets.
 export function analyzePension(
   number: string,
   history: PensionTicket[] = [],
@@ -63,41 +64,25 @@ export function analyzePension(
 
 export function recommendPension(
   random: RandomSource = browserRandom,
-  history: PensionTicket[] = [],
 ): PensionTicket[] {
-  const pool = new Map<string, number>();
-  for (let i = 0; i < config.candidateCount; i++) {
-    const number = generatePensionNumber(random);
-    pool.set(number, analyzePension(number, history).score);
+  const numbers = new Set<string>();
+  // Draw each digit with replacement. Repetition and positional overlap do not
+  // affect selection; only an identical six-digit ticket is retried.
+  for (
+    let attempt = 0;
+    attempt < config.maxGenerationAttempts &&
+    numbers.size < config.recommendations;
+    attempt++
+  ) {
+    numbers.add(generatePensionNumber(random));
   }
-  const remaining = [...pool].map(([number, score]) => ({ number, score }));
-  const groups = shuffle(config.groups, random);
-  const selected: PensionTicket[] = [];
-  while (selected.length < config.recommendations && remaining.length) {
-    let bestIndex = 0;
-    let bestScore = -Infinity;
-    remaining.forEach((candidate, index) => {
-      const overlap = Math.max(
-        0,
-        ...selected.map(
-          (ticket) =>
-            [...ticket.number].filter(
-              (digit, i) => digit === candidate.number[i],
-            ).length,
-        ),
-      );
-      const score = candidate.score - overlap * 15;
-      if (score > bestScore) {
-        bestIndex = index;
-        bestScore = score;
-      }
-    });
-    const candidate = remaining.splice(bestIndex, 1)[0];
-    selected.push({ group: groups[selected.length], number: candidate.number });
-  }
-  if (selected.length !== config.recommendations)
+  if (numbers.size !== config.recommendations)
     throw new Error(
       '추천 번호를 충분히 생성하지 못했습니다. 다시 시도해 주세요.',
     );
-  return selected;
+  const groups = shuffle(config.groups, random);
+  return [...numbers].map((number, index) => ({
+    group: groups[index],
+    number,
+  }));
 }
