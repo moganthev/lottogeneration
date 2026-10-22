@@ -43,6 +43,7 @@ export default defineConfig({
         ],
       },
       workbox: {
+        importScripts: ['refresh-view.js'],
         clientsClaim: true,
         globPatterns: ['**/*.{js,css,html,svg,png,json,woff2}'],
         navigateFallback: `${base}index.html`,

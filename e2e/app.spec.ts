@@ -300,3 +300,85 @@ test('PWA update is offered, activated on request and retains stored games', asy
     await writeFile('dist/sw.js', serviceWorker);
   }
 });
+
+for (const discoveredInBackground of [false, true]) {
+  test(`refresh link replaces a cached legacy screen (${discoveredInBackground ? 'background update' : 'on navigation'}) and retains stored games`, async ({
+    page,
+    baseURL,
+  }) => {
+    // Installing a legacy shell and then upgrading it involves several full loads.
+    test.setTimeout(60_000);
+    const serviceWorker = await readFile('dist/sw.js', 'utf8');
+    const workerPath = new URL('sw.js', baseURL).pathname;
+    const legacyTitle = '오늘의 숫자, 균형 있게 골라볼까요?';
+    const legacyHtml = `<!doctype html><html lang="ko"><head><meta charset="UTF-8"></head><body>
+    <h1>${legacyTitle}</h1>
+    <script>navigator.serviceWorker.register(${JSON.stringify(workerPath)});</script>
+    </body></html>`;
+    // Emulate an older release that always serves its cached HTML on navigation.
+    const legacyWorker = `
+    self.addEventListener('install', event => {
+      event.waitUntil(caches.open('legacy-shell-test').then(cache =>
+        cache.put(${JSON.stringify(baseURL)}, new Response(${JSON.stringify(legacyHtml)}, {
+          headers: { 'Content-Type': 'text/html; charset=utf-8' }
+        }))
+      ).then(() => self.skipWaiting()));
+    });
+    self.addEventListener('activate', event => event.waitUntil(self.clients.claim()));
+    self.addEventListener('fetch', event => {
+      if (event.request.mode === 'navigate') {
+        event.respondWith(caches.open('legacy-shell-test').then(cache =>
+          cache.match(${JSON.stringify(baseURL)})
+        ));
+      }
+    });
+  `;
+    try {
+      await writeFile('dist/sw.js', legacyWorker);
+      await page.goto('./');
+      await page.evaluate(async () => {
+        await navigator.serviceWorker.ready;
+      });
+      await page
+        .getByRole('button', { name: '5게임 추천받기', exact: true })
+        .click();
+      await expect(page.locator('.game-card')).toHaveCount(5);
+      const before = await page.locator('.balls').allTextContents();
+      await page.reload();
+      await expect(
+        page.getByRole('heading', { name: legacyTitle }),
+      ).toBeVisible();
+
+      const legacyController = await page.evaluateHandle(
+        () => navigator.serviceWorker.controller,
+      );
+      await writeFile('dist/sw.js', serviceWorker);
+      if (discoveredInBackground) {
+        await page.evaluate(async () => {
+          const registration = await navigator.serviceWorker.getRegistration();
+          await registration?.update();
+        });
+        await page.waitForFunction(
+          (previous) => navigator.serviceWorker.controller !== previous,
+          legacyController,
+        );
+        await expect(
+          page.getByRole('heading', { name: legacyTitle }),
+        ).toBeVisible();
+      }
+      await page.goto(new URL('?refresh=1', baseURL).href);
+      await expect(
+        page.getByRole('heading', { name: '오늘의 추천 번호' }),
+      ).toBeVisible({ timeout: 15_000 });
+      await expect(
+        page.getByRole('heading', { name: legacyTitle }),
+      ).toHaveCount(0);
+      await expect(page.locator('.hero, .hero-art')).toHaveCount(0);
+      await expect(page.locator('.game-card')).toHaveCount(5);
+      expect(await page.locator('.balls').allTextContents()).toEqual(before);
+      expect(new URL(page.url()).searchParams.has('refresh')).toBe(false);
+    } finally {
+      await writeFile('dist/sw.js', serviceWorker);
+    }
+  });
+}
