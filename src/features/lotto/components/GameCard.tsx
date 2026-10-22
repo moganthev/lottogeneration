@@ -1,4 +1,3 @@
-import { ChevronDown, RotateCw, LockKeyhole } from 'lucide-react';
 import { Ball } from '../../../shared/components/Ball';
 import { calculateSimilarity } from '../algorithms/statistics';
 import type { LottoGame } from '../types';
@@ -29,10 +28,7 @@ export function GameCard({
     <article className="game-card">
       <div className="game-topline">
         <span className="game-label">
-          <span className="game-index">
-            {String(index + 1).padStart(2, '0')}
-          </span>{' '}
-          GAME {index + 1}
+          {String(index + 1).padStart(2, '0')}번 게임
         </span>
         <span className="score-label">
           조합 평가점수 <strong>{game.score}</strong>
@@ -54,14 +50,12 @@ export function GameCard({
           onClick={onReroll}
           aria-label={`GAME ${index + 1} 다시 추천`}
         >
-          <RotateCw size={15} />
           <span>다시 추천</span>
         </button>
       </div>
       <details className="game-details">
         <summary>
           <span>분석 보기</span>
-          <ChevronDown size={15} />
         </summary>
         <dl className="analysis-grid">
           <div>
@@ -123,10 +117,7 @@ export function GameCard({
         </p>
       </details>
       {fixed.length > 0 && (
-        <span className="sr-only">
-          <LockKeyhole />
-          고정 번호 {fixed.join(', ')}
-        </span>
+        <span className="sr-only">고정 번호 {fixed.join(', ')}</span>
       )}
     </article>
   );

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { LockKeyhole, Ban, RotateCcw } from 'lucide-react';
 import type { LottoConstraints } from '../types';
 import { validateConstraints } from '../algorithms/recommend';
 
@@ -35,7 +34,7 @@ export function NumberPicker({
   return (
     <section className="side-card picker-card" aria-labelledby={id}>
       <div className="side-heading">
-        <h3 id={id}>나만의 번호 설정</h3>
+        <h3 id={id}>번호 설정</h3>
         <button
           className="text-button"
           disabled={disabled}
@@ -44,15 +43,9 @@ export function NumberPicker({
             setError('');
           }}
         >
-          <RotateCcw size={12} />
           초기화
         </button>
       </div>
-      <p className="side-description">
-        마음에 드는 번호는 고정하고,
-        <br />
-        잠시 빼두고 싶은 번호는 제외하세요.
-      </p>
       <div className="picker-modes">
         <button
           className={mode === 'fixed' ? 'selected' : ''}
@@ -62,7 +55,6 @@ export function NumberPicker({
           }}
           aria-pressed={mode === 'fixed'}
         >
-          <LockKeyhole size={13} />
           고정 <span>{constraints.fixed.length}</span>
         </button>
         <button
@@ -73,7 +65,6 @@ export function NumberPicker({
           }}
           aria-pressed={mode === 'excluded'}
         >
-          <Ban size={13} />
           제외 <span>{constraints.excluded.length}</span>
         </button>
       </div>
@@ -111,9 +102,9 @@ export function NumberPicker({
         </span>
       </div>
       <p className="picker-note">
-        고정은 최대 5개 · 다음 5게임 추천부터 적용
+        고정 최대 5개 · 새 추천부터 적용
         <br />
-        같은 번호를 다시 누르면 선택이 해제됩니다.
+        같은 번호를 다시 누르면 해제됩니다.
       </p>
     </section>
   );

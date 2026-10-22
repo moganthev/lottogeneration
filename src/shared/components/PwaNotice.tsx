@@ -87,10 +87,7 @@ export function PwaNotice() {
             >
               <X size={20} />
             </button>
-            <div className="dialog-icon">
-              <Download size={26} />
-            </div>
-            <h2>홈 화면에서 바로 만나요</h2>
+            <h2>앱 설치 안내</h2>
             <p>
               iPhone Safari에서는 공유 버튼 → ‘홈 화면에 추가’를 선택하세요.
             </p>
@@ -99,7 +96,8 @@ export function PwaNotice() {
               화면에 추가’를 선택하세요.
             </p>
             <p className="muted">
-              HTTPS로 접속해 한 번 불러오면 오프라인에서도 추천할 수 있어요.
+              한 번 접속해 데이터 저장이 끝나면 오프라인에서도 추천할 수
+              있습니다.
             </p>
             <button
               className="primary-button"

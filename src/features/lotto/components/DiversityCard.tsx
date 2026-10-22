@@ -1,4 +1,3 @@
-import { Layers3 } from 'lucide-react';
 import { analyzeDiversity } from '../algorithms/statistics';
 
 export function DiversityCard({
@@ -12,19 +11,14 @@ export function DiversityCard({
   return (
     <section className="side-card diversity-card">
       <div className="side-heading">
-        <h3>다섯 게임의 다양성</h3>
-        <Layers3 size={18} />
+        <h3>5게임 중복 현황</h3>
       </div>
-      <p className="side-description">서로 다른 번호를 얼마나 담았을까요?</p>
       <div className="diversity-main">
         <strong>
           {diversity.uniqueCount}
           <small> / 30</small>
         </strong>
         <span>전체 고유 번호</span>
-      </div>
-      <div className="coverage-track">
-        <span style={{ width: `${(diversity.uniqueCount / 30) * 100}%` }} />
       </div>
       <dl className="diversity-stats">
         <div>
@@ -37,9 +31,7 @@ export function DiversityCard({
         </div>
       </dl>
       {hasFixed && (
-        <p className="picker-note">
-          고정 번호는 모든 게임에 포함되므로 중복이 늘어날 수 있어요.
-        </p>
+        <p className="picker-note">고정 번호는 모든 게임에 포함됩니다.</p>
       )}
     </section>
   );

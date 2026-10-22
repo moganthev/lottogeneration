@@ -1,19 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  ArrowDown,
-  ArrowRight,
-  Check,
-  CircleHelp,
-  Clover,
-  Info,
-  LoaderCircle,
-  ShieldCheck,
-  SlidersHorizontal,
-  Sparkles,
-  Ticket,
-} from 'lucide-react';
-import { Ball } from '../shared/components/Ball';
-import { SiteHeader, Hero, About, SiteFooter } from './components/SiteLayout';
+import { LoaderCircle } from 'lucide-react';
+import { SiteHeader, About, SiteFooter } from './components/SiteLayout';
 import { DiversityCard } from '../features/lotto/components/DiversityCard';
 import {
   PensionResults,
@@ -139,8 +126,6 @@ export default function App() {
       <SiteHeader online={online} />
 
       <main>
-        <Hero />
-
         <div
           className="lottery-tabs"
           role="tablist"
@@ -179,8 +164,7 @@ export default function App() {
               setStatus('');
             }}
           >
-            <Clover size={18} />
-            로또 6/45<span>LOTTO</span>
+            로또 6/45
           </button>
           <button
             id="pension-tab"
@@ -196,27 +180,34 @@ export default function App() {
               setStatus('');
             }}
           >
-            <Ticket size={18} />
-            연금복권<span>720+</span>
+            연금복권720+
           </button>
         </div>
 
-        <div className="data-notice">
-          <Info size={16} />
-          <p>
-            <strong>
-              {history
-                ? `분석 데이터 ${history.metadata.firstDraw.toLocaleString('ko-KR')}회 ~ ${history.metadata.latestDraw.toLocaleString('ko-KR')}회`
-                : '당첨 데이터를 확인하고 있어요.'}
-            </strong>{' '}
-            {history &&
-              `총 ${history.metadata.drawCount.toLocaleString('ko-KR')}개 회차 · 최근 추첨 ${history.metadata.latestDrawDate} · 갱신 ${new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(history.metadata.lastUpdated))}`}{' '}
-            <a href="#about-data">
-              데이터 안내 <ArrowDown size={11} />
-            </a>
-          </p>
-        </div>
-        {dataError && (
+        {isLotto && (
+          <div className="data-notice">
+            <p>
+              <strong>
+                {history
+                  ? `분석 데이터 ${history.metadata.firstDraw.toLocaleString('ko-KR')}회 ~ ${history.metadata.latestDraw.toLocaleString('ko-KR')}회`
+                  : '당첨 데이터 확인 중'}
+              </strong>{' '}
+              {history &&
+                `총 ${history.metadata.drawCount.toLocaleString('ko-KR')}개 회차 · 최근 추첨 ${history.metadata.latestDrawDate} · 갱신 ${new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(history.metadata.lastUpdated))}`}{' '}
+              <a
+                href="#about-data"
+                onClick={() => {
+                  const details = document.getElementById('about-data');
+                  if (details instanceof HTMLDetailsElement)
+                    details.open = true;
+                }}
+              >
+                출처 보기
+              </a>
+            </p>
+          </div>
+        )}
+        {isLotto && dataError && (
           <p className="error-notice" role="alert">
             {dataError}
           </p>
@@ -230,22 +221,17 @@ export default function App() {
           <section className="recommendations" aria-busy={busy}>
             <div className="section-top">
               <div>
-                <p className="section-eyebrow">YOUR DAILY PICKS</p>
-                <h2>
-                  {isLotto ? '오늘의 추천 번호' : '조금 다른, 다섯 가지 선택'}{' '}
-                  <span>5 GAMES</span>
-                </h2>
+                <h2>{isLotto ? '오늘의 추천 번호' : '연금복권 추천 번호'}</h2>
                 <p>
                   {isLotto
-                    ? '조합의 균형을 살피고, 게임 사이의 겹침은 줄였어요.'
-                    : '자리별 숫자와 조를 다양하게 골라보세요.'}
+                    ? '한 번에 5게임을 추천합니다. 고정·제외 번호를 먼저 설정할 수 있습니다.'
+                    : '각 조에서 여섯 자리 번호를 하나씩 추천합니다.'}
                 </p>
               </div>
             </div>
             {isLotto && (
               <details className="mobile-settings">
                 <summary>
-                  <SlidersHorizontal size={15} />
                   <span>번호 고정·제외 설정</span>
                   <small>
                     고정 {saved.constraints.fixed.length} · 제외{' '}
@@ -267,25 +253,15 @@ export default function App() {
               disabled={busy || (isLotto && !draws)}
               onClick={() => (isLotto ? void generate() : generatePension())}
             >
-              {busy ? (
-                <LoaderCircle size={18} className="spin" />
-              ) : (
-                <Sparkles size={18} />
-              )}
+              {busy && <LoaderCircle size={16} className="spin" />}
               <span>
                 {busy
-                  ? '균형 잡힌 조합을 찾고 있어요…'
+                  ? '추천 중…'
                   : isLotto
                     ? '5게임 추천받기'
                     : '연금복권 번호 추천'}
               </span>
-              {!busy && <ArrowRight size={18} />}
             </button>
-            <p className="generation-note">
-              {isLotto
-                ? '5,000개 후보 분석 · 높은 점수와 다양한 번호를 함께 고려해요'
-                : '1~5조 · 000000~999999 · 반복과 자리 중복을 함께 살펴요'}
-            </p>
             {error && (
               <p className="error-notice" role="alert">
                 {error}
@@ -296,8 +272,7 @@ export default function App() {
             </p>
             {isLotto && conditionsChanged && games.length > 0 && (
               <p className="pending-notice">
-                <Info size={15} />
-                번호 설정이 바뀌었어요. ‘5게임 추천받기’로 전체에 적용해 주세요.
+                번호 설정이 변경되었습니다. ‘5게임 추천받기’를 눌러 적용하세요.
               </p>
             )}
             {isLotto ? (
@@ -318,25 +293,12 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="empty-state">
-                    <span className="empty-icon">
-                      <Clover size={32} />
-                    </span>
-                    <h3>다섯 게임에 담을 오늘의 균형</h3>
-                    <p>
-                      위의 추천 버튼을 눌러 시작해 보세요.
-                      <br />
-                      원하는 번호가 있다면 먼저 고정할 수 있어요.
-                    </p>
-                    <div className="empty-balls" aria-hidden="true">
-                      {[7, 16, 23, 34, 42].map((n) => (
-                        <Ball key={n} number={n} />
-                      ))}
-                    </div>
+                    <p>추천 번호가 없습니다.</p>
+                    <p>‘5게임 추천받기’를 눌러 번호를 생성하세요.</p>
                   </div>
                 )}
                 {saved.generatedAt && (
                   <p className="saved-note">
-                    <Check size={12} />
                     마지막 추천{' '}
                     {new Intl.DateTimeFormat('ko-KR', {
                       timeZone: 'Asia/Seoul',
@@ -354,18 +316,10 @@ export default function App() {
                 <PensionResults tickets={saved.pension} />
               </>
             )}
-            <div className="responsible-note">
-              <ShieldCheck size={20} />
-              <p>
-                <strong>분석은 선택의 참고일 뿐이에요.</strong>
-                <br />
-                모든 로또 6개 번호 조합의 당첨 확률은 동일합니다.
-                <br />
-                1등 확률은 1 / 8,145,060입니다.
-                <br />
-                조합 평가점수는 실제 당첨 확률을 의미하지 않습니다.
-              </p>
-            </div>
+            <p className="responsible-note">
+              조합 평가점수는 당첨 확률이 아닙니다. 모든 유효한 로또 조합의 1등
+              확률은 1 / 8,145,060으로 같습니다.
+            </p>
           </section>
 
           <aside className="sidebar">
@@ -382,26 +336,12 @@ export default function App() {
             ) : (
               <PensionMethodCard />
             )}
-            {isLotto && (
+            {isLotto && games.length > 0 && (
               <DiversityCard
                 games={history ? saved.games : []}
                 hasFixed={saved.appliedConstraints.fixed.length > 0}
               />
             )}
-            <section className="how-card">
-              <span className="how-icon">
-                <CircleHelp size={18} />
-              </span>
-              <h3>좋은 점수는 무슨 뜻인가요?</h3>
-              <p>
-                홀짝, 번호합, 구간 분포 등을 살펴
-                <br />
-                조합이 균형 잡힌 정도를 표시해요.
-              </p>
-              <a href="#about-algorithm">
-                추천 방식 알아보기 <ArrowRight size={13} />
-              </a>
-            </section>
           </aside>
         </div>
 
