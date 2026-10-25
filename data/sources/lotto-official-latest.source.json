@@ -1,0 +1,12 @@
+{
+  "sourceName": "동행복권 로또6/45 공개 추첨 결과",
+  "sourceUrl": "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1247",
+  "pageUrl": "https://www.dhlottery.co.kr/lt645/result",
+  "retrievedAt": "2026-10-25T08:32:07.883Z",
+  "originalResponseSha256": "ad36d664036e9f2c6f0f331ef009c68501ac74603698ae5d3310e38da2f091ef",
+  "confirmationUrl": "https://www.dhlottery.co.kr/lt645/selectPstLt645InfoNew.do?srchDir=center&srchLtEpsd=1247",
+  "confirmationResponseSha256": "805d866d696b95f163957225d83510b69e953a3a08fe41d581136d9e3a7ddf6c",
+  "csvSha256": "e2951388acb60851934144609f729f2fd229aa5c3a786e1d23b2170a6ea17395",
+  "drawCount": 1247,
+  "usage": "Public factual draw numbers and dates only; no site text, images, logos, prize tables or software copied."
+}
