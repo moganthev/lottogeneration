@@ -2,7 +2,7 @@
 
 React · TypeScript 기반의 모바일 우선 로또 6/45 / 연금복권720+ 웹·PWA입니다. 서버나 데이터베이스 없이 브라우저에서 번호를 분석하며, GitHub Pages에 정적 파일로 배포할 수 있습니다.
 
-> **실제 당첨 이력 적용:** 동행복권 공개 조회에서 받은 **1회~1,246회, 총 1,246건**을 정적으로 포함합니다. 마지막 추첨일은 **2026-10-17**, 수집·검증일은 **2026-10-22**입니다. 자동 실시간 갱신이 아니라 빌드에 포함된 스냅샷입니다. 앱이 추천할 때 외부 사이트를 호출하지 않습니다.
+> **실제 당첨 이력 자동 갱신:** 동행복권 공식 조회에서 받은 **1회부터 최신 검증 회차까지**를 포함합니다. 토요일 추첨 후 공식 결과 확인 → 검증 → GitHub 커밋 → 사이트 배포를 자동 실행합니다. 현재 반영 범위·최근 추첨일·갱신일은 사이트 상단과 production JSON의 metadata에서 확인합니다. 앱이 추천할 때 외부 사이트를 호출하지 않습니다.
 >
 > **연금복권 규칙 확인:** 2026-10-22 [동행복권 공식 상품 안내](https://www.dhlottery.co.kr/pt720/intro)의 게임방법에서 **1조 000000 ~ 5조 999999**를 직접 확인했습니다. `000000`과 앞자리 0을 보존합니다.
 
@@ -46,6 +46,7 @@ npm run lint           # ESLint, 경고도 실패 처리
 npm run test           # Vitest 단위 테스트, 일회 실행
 npm run test:watch     # 개발 중 테스트
 npm run data:check     # 실제 이력·metadata·SHA-256 검증
+npm run data:update    # 동행복권 공식 최신 결과 확인·검증·갱신
 npm run analyze        # 고정 seed 200세트 선택 편향 분석
 npm run build          # 데이터 검증 + strict TypeScript + production build + PWA
 npm run preview        # 생성한 dist 로컬 검증
@@ -182,9 +183,10 @@ Production은 `crypto.getRandomValues()`를 사용하는 `RandomSource`를 주�
 현재 production JSON에는 합성 이력이 없습니다. 기존 합성 60건은 제거했습니다. 테스트 내부의 작은 수학 예제만 테스트 전용으로 사용합니다.
 
 - 출처: [동행복권 로또6/45 추첨 결과](https://www.dhlottery.co.kr/lt645/result)
-- 공식 화면의 회차 범위 조회: `https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1246`
+- 공식 화면의 회차 범위 조회(초기 스냅샷): `https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1246`
 - 원본에서 **번호·보너스·회차·날짜 사실정보만** 추출했습니다. 사이트 문구·이미지·로고·상금 표·소프트웨어는 복사하지 않았으며 원사이트 전체에 대한 재배포 라이선스를 주장하지 않습니다.
-- `data/sources/lotto-official-1-1246.csv`: 조회한 사실정보의 입력 스냅샷
+- `data/sources/lotto-official-1-1246.csv`: 초기 1~1,246회 고정 입력 스냅샷
+- `data/sources/lotto-official-latest.csv`: 자동 갱신된 최신 전체 이력. 같은 이름의 `.source.json`에 두 공식 조회 응답의 SHA-256과 CSV SHA-256을 기록합니다.
 - 같은 이름의 `.source.json`: 공식 URL, 수집 일시, 원본 응답 SHA-256, CSV SHA-256
 - production metadata: 첫/최신 회차, 건수, 최신 추첨일, 갱신일, 원본 CSV SHA-256, 정규화 데이터 SHA-256
 - 별도의 공식 회차 조회 경로(`selectPstLt645InfoNew.do`)에서도 처음·마지막 각 10건, 총 20건을 대조했습니다.
@@ -219,7 +221,13 @@ npm run build
 
 포함된 스냅샷을 다시 생성하려면 같은 명령의 입력을 `data/sources/lotto-official-1-1246.csv`로 지정하고 `.source.json`의 실제 수집 일시와 URL을 사용하세요. 번호·날짜와 데이터 해시는 재현되며 `lastUpdated`는 가져온 시각으로 갱신됩니다.
 
-현재 자동 수집 스케줄은 없습니다. 공식 사이트에서 새 전체 이력을 받아 import → 검증 → 테스트 → 빌드 → main 반영으로 갱신합니다. 자동 접근이 거부되면 우회하지 말고 공식 다운로드/수동 CSV 입력을 사용하세요. 서버·비밀 키·런타임 외부 요청은 필요하지 않습니다.
+### 추첨 후 자동 갱신
+
+`.github/workflows/deploy.yml`이 **한국시간 토요일 20:50, 21:20, 22:20, 일요일 09:20**에 공식 결과를 확인합니다. GitHub 예약 실행은 서비스 상황에 따라 지연될 수 있습니다. 첫 실행에서 결과가 아직 공개되지 않았으면 기존 데이터를 유지하고 다음 예약에서 재확인합니다.
+
+`npm run data:update`는 공식 전체 회차 조회와 최근 회차 조회를 대조합니다. 기존 이력 변경·축소, 누락 회차, 미래 회차, 잘못된 번호·날짜, 조회 경로 간 불일치를 거부합니다. 새 회차가 없으면 파일·갱신 시각·커밋·배포를 바꾸지 않습니다. 새 회차가 있으면 출처 기록과 CSV를 준비하고 production JSON을 마지막에 교체합니다. 데이터 해시와 테스트를 통과한 결과만 `github-actions[bot]`이 main에 커밋합니다. 같은 workflow가 그 커밋을 직접 checkout해 전체 검사·빌드·브라우저 테스트 후 Pages에 배포합니다. `GITHUB_TOKEN` 커밋이 별도 push workflow를 만들지 않는 점도 처리합니다.
+
+수동 실행은 GitHub Actions의 **Validate and deploy GitHub Pages → Run workflow**에서 `update_data=true`를 사용합니다. 로컬에서는 `npm run data:update -- --dry-run`으로 파일을 바꾸지 않고 공식 결과와 검증 과정을 확인할 수 있습니다. 프록시를 사용하는 클라우드 환경에서는 Node.js 24의 `NODE_USE_ENV_PROXY=1`을 사용합니다. 공식 접근이 거부되면 기존 데이터를 보존하며, 공식 다운로드/수동 CSV import도 계속 사용할 수 있습니다. 서버·추가 비밀 키·추천 시 외부 요청은 필요하지 않습니다.
 
 ### 알고리즘 분석 도구
 

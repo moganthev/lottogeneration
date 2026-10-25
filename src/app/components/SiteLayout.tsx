@@ -50,7 +50,8 @@ export function About({ metadata }: { metadata: LottoHistoryMetadata | null }) {
             {metadata.latestDraw.toLocaleString('ko-KR')}회 · 총{' '}
             {metadata.drawCount.toLocaleString('ko-KR')}개 회차 · 최근 추첨{' '}
             {metadata.latestDrawDate}
-            <br />새 회차는 데이터 갱신 후 반영됩니다.
+            <br />
+            토요일 추첨 후 공식 결과를 확인해 자동 갱신합니다.
           </p>
         ) : (
           <p>검증된 당첨 데이터가 없으면 로또 추천을 사용할 수 없습니다.</p>

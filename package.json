@@ -17,6 +17,7 @@
     "format:check": "prettier --check .",
     "test:e2e": "playwright test",
     "data:import": "tsx scripts/import-lotto-history.ts",
+    "data:update": "tsx scripts/update-lotto-history.ts",
     "data:check": "tsx scripts/check-lotto-history.ts",
     "analyze": "tsx scripts/analyze.ts"
   },

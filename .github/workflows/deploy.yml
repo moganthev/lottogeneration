@@ -5,7 +5,17 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    # Korea time: Saturday 20:50, 21:20, 22:20; Sunday 09:20 fallback.
+    - cron: '50 11 * * 6'
+    - cron: '20 12,13 * * 6'
+    - cron: '20 0 * * 0'
   workflow_dispatch:
+    inputs:
+      update_data:
+        description: 'Check and update official draw results before deployment'
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -15,10 +25,60 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  refresh-data:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.update_data)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+      revision: ${{ steps.commit.outputs.revision }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run data:update
+      - run: npm run data:check
+      - run: npm run test
+      - name: Commit verified new results
+        id: commit
+        run: |
+          if git diff --quiet -- src/features/lotto/data/lotto-history.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No new official results; existing data and deployment retained." >> "$GITHUB_STEP_SUMMARY"
+          else
+            npm run data:check -- data/sources/lotto-official-latest.csv
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/features/lotto/data/lotto-history.json data/sources/lotto-official-latest.csv data/sources/lotto-official-latest.source.json
+            draw_no="$(node -p "require('./src/features/lotto/data/lotto-history.json').metadata.latestDraw")"
+            git commit -m "data: update official lotto history to draw ${draw_no}"
+            git push origin HEAD:main
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Updated and verified official draw ${draw_no}; deploying this commit below." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
   validate-and-build:
+    needs: refresh-data
+    if: >-
+      always() && !cancelled() &&
+      (needs.refresh-data.result == 'skipped' ||
+      (needs.refresh-data.result == 'success' && needs.refresh-data.outputs.changed == 'true'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # GITHUB_TOKEN commits do not trigger another push workflow. Build and
+          # deploy the updater's actual commit in this same run instead.
+          ref: ${{ needs.refresh-data.outputs.revision || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
