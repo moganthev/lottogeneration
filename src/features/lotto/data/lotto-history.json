@@ -2,16 +2,16 @@
   "metadata": {
     "kind": "historical",
     "firstDraw": 1,
-    "latestDraw": 1247,
-    "drawCount": 1247,
-    "latestDrawDate": "2026-10-24",
-    "lastUpdated": "2026-10-25T08:32:07.883Z",
-    "dataSha256": "63406cade0229d58c134e8283fedd9cd90159bf4b2d29250a5ae419d13bb931c",
+    "latestDraw": 1248,
+    "drawCount": 1248,
+    "latestDrawDate": "2026-10-31",
+    "lastUpdated": "2026-10-31T17:18:18.909Z",
+    "dataSha256": "272c69d4c6e4484b9f64dddffc12606410efcad6bcc76f951d3a3b0aeb62763e",
     "source": {
       "name": "동행복권 로또6/45 공개 추첨 결과",
-      "url": "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1247",
-      "retrievedAt": "2026-10-25T08:32:07.883Z",
-      "sha256": "e2951388acb60851934144609f729f2fd229aa5c3a786e1d23b2170a6ea17395"
+      "url": "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1248",
+      "retrievedAt": "2026-10-31T17:18:18.909Z",
+      "sha256": "21cfb29f725d2a1816df5cb4ea799a43003ce5a97906f6b45d79360235a18ed3"
     }
   },
   "draws": [
@@ -7496,6 +7496,12 @@
       "drawDate": "2026-10-24",
       "numbers": [8, 14, 21, 22, 42, 45],
       "bonus": 24
+    },
+    {
+      "drawNo": 1248,
+      "drawDate": "2026-10-31",
+      "numbers": [16, 18, 27, 36, 38, 42],
+      "bonus": 22
     }
   ]
 }
