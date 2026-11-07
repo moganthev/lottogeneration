@@ -1,12 +1,12 @@
 {
   "sourceName": "동행복권 로또6/45 공개 추첨 결과",
-  "sourceUrl": "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1248",
+  "sourceUrl": "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1249",
   "pageUrl": "https://www.dhlottery.co.kr/lt645/result",
-  "retrievedAt": "2026-10-31T17:18:18.909Z",
-  "originalResponseSha256": "b49e11a49ac24fd4f9f114a1ea64baeafc72805f747d810c4b6170f757f1a11b",
-  "confirmationUrl": "https://www.dhlottery.co.kr/lt645/selectPstLt645InfoNew.do?srchDir=center&srchLtEpsd=1248",
-  "confirmationResponseSha256": "7e0ec0099d8f3423c371e5bb02e381973a020f84886be5376dfe43e7487497a3",
-  "csvSha256": "21cfb29f725d2a1816df5cb4ea799a43003ce5a97906f6b45d79360235a18ed3",
-  "drawCount": 1248,
+  "retrievedAt": "2026-11-07T17:00:36.745Z",
+  "originalResponseSha256": "9629baa8cfb0f101210a20e019269f87a5ff512d97dd17c594d568b28fa290fd",
+  "confirmationUrl": "https://www.dhlottery.co.kr/lt645/selectPstLt645InfoNew.do?srchDir=center&srchLtEpsd=1249",
+  "confirmationResponseSha256": "d6037449faf24cefc59392b92abed7d16e6785647e1184e6a103f523a9c2de56",
+  "csvSha256": "0a58b90468025bc1ac180ae5baa7c9bdc1cb5ec850c09f5cd4b58c4ef2e73e57",
+  "drawCount": 1249,
   "usage": "Public factual draw numbers and dates only; no site text, images, logos, prize tables or software copied."
 }
